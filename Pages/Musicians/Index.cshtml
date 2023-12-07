@@ -1,0 +1,70 @@
+@page
+@model FinalProject.Pages.Musicians.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<!-- Code for SelectList -->
+<form>
+	<select asp-for="CurrentSort" asp-items="Model.SortList">
+		<option value="">sort by...</option>
+	</select>
+	<button type="submit">Sort</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @{
+                    // Alternate sort order
+                    var firstSort = "first_asc";
+                    if (Model.CurrentSort == "first_asc")
+                    {
+                        firstSort = "first_desc";
+                    }
+                }
+                
+                <a asp-page="./Index" asp-route-CurrentSort="@firstSort">@Html.DisplayNameFor(model => model.Musician[0].MusicianName)</a>
+            <th>
+                @Html.DisplayNameFor(model => model.Musician[0].Website)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Musician) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MusicianName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Website)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MusicianId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MusicianId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.MusicianId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@{
+    var prevDisabled = "";
+    if (Model.PageNum <= 1)
+    {
+        prevDisabled = "disabled";
+    }
+}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum - 1)">Previous</a></li>
+        <li class="page-item"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum + 1)">Next</a></li>
+    </ul>
+</nav>

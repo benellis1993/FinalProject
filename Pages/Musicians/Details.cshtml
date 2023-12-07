@@ -1,0 +1,95 @@
+@page "{id}/{pageNum?}"
+@model FinalProject.Pages.Musicians.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Musician</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Musician!.MusicianName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Musician!.MusicianName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Musician!.Website)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Musician!.Website)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Musician!.Instrument)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var musicianInstrument in Model.Musician!.MusicianInstruments)
+            {
+                <p>@musicianInstrument.Instrument!.InstrumentName</p>
+            }
+        </dd>
+<!--here-->
+<form>
+	<select asp-for="CurrentSort" asp-items="Model.SortList">
+		<option value="">sort by...</option>
+	</select>
+	<button type="submit">Sort</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @{
+                    // Alternate sort order
+                    var firstSort = "first_asc";
+                    if (Model.CurrentSort == "first_asc")
+                    {
+                        firstSort = "first_desc";
+                    }
+                }
+                <a asp-page="./Details" asp-route-CurrentSort="@firstSort">@Html.DisplayNameFor(model => model.Discographies[0].RecordName)</a>
+            <th>
+                @Html.DisplayNameFor(model => model.Discographies[0].ReleaseDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+@foreach (var item in Model.Discographies) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@{
+    // If we are on page 1, prevDisabled will be set to the "disabled" class
+    // otherwise, it will be empty. So our previous button will be enabled or disabled based on this logic
+    var prevDisabled = "";
+    if (Model.PageNum <= 1)
+    {
+        prevDisabled = "disabled";
+    }
+}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <!-- FIXME: These buttons will forget your current sort order! -->
+        <li class="page-item @prevDisabled"><a class="page-link" asp-page="./Details" asp-route-PageNum="@(Model.PageNum - 1)">Previous</a></li>
+        <li class="page-item"><a class="page-link" asp-page="./Details" asp-route-id="@Model.Musician!.MusicianId" asp-route-PageNum="@(Model.PageNum + 1)">Next</a></li>
+    </ul>
+</nav>
+<!--here--
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Musician!.MusicianId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

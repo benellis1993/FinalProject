@@ -1,0 +1,44 @@
+@page
+@model FinalProject.Pages.Musicians.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Musician</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Musician!.MusicianName" class="control-label"></label>
+                <input asp-for="Musician!.MusicianName" class="form-control" />
+                <span asp-validation-for="Musician!.MusicianName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Musician!.Website" class="control-label"></label>
+                <input asp-for="Musician!.Website" class="form-control" />
+                <span asp-validation-for="Musician!.Website" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Instrument!.InstrumentName" class="control-label"></label>
+                <input asp-for="Instrument!.InstrumentName" class="form-control" />
+                <span asp-validation-for="Instrument!.InstrumentName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
